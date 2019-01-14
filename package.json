@@ -10,8 +10,7 @@
   "dependencies": {
     "async": "~2.1.x",
     "bluebird": "~3.4.x",
-    "redis": "~2.6.x",
-    "underscore": "~1.8.x"
+    "ioredis": "^4.3.0"
   },
   "main": "./index.js",
   "engines": {
