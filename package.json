@@ -9,12 +9,12 @@
   },
   "dependencies": {
     "async": "~2.1.x",
-    "bluebird": "~3.4.x",
-    "ioredis": "^4.3.0"
+    "bluebird": "~3.5.x",
+    "ioredis": "^4.6"
   },
   "main": "./index.js",
   "engines": {
-    "node": ">= 6.0.0"
+    "node": ">= 10.0.0"
   },
   "licenses": [
     {
@@ -43,6 +43,27 @@
     "grunt-contrib-jshint": "^1.1.0",
     "grunt-contrib-watch": "^1.0.0",
     "grunt-mocha-cov": "^0.4.0",
-    "mocha": "~3.2.0"
+    "mocha": "~3.2.0",
+    "xo": "~0.18.2"
+  },
+  "xo": {
+    "space": true,
+    "rules": {
+      "quotes": [
+        "error",
+        "single",
+        {
+          "allowTemplateLiterals": true,
+          "avoidEscape": true
+        }
+      ],
+      "camelcase": [
+        2,
+        {
+          "properties": "never"
+        }
+      ],
+      "no-mixed-operators": "off"
+    }
   }
 }
