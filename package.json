@@ -10,7 +10,8 @@
   "dependencies": {
     "async": "~2.1.x",
     "bluebird": "~3.5.x",
-    "ioredis": "^4.6"
+    "ioredis": "^4.6",
+    "lodash": "~4.17.11"
   },
   "main": "./index.js",
   "engines": {
