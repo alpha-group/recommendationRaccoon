@@ -17,17 +17,13 @@ const stat = require('../lib/stat');
 
 
 describe('should go through correct flow when user is eligible for debt view', () => {
-  it('shoould resolve with value from zrevrange', () => {
+  it('should resolve with value from zrevrange', () => {
     const client = {
       sismember: chai.spy.returns(Promise.resolve(true)),
       srem: chai.spy.returns(true),
       zcount: chai.spy.returns([1,2,3,4]),
       zrevrange: chai.spy.returns([3,4]),
     };
-
-    Key.userForViewDebtSet = chai.spy.returns('userDebtKey');
-    Key.activeItemsZSet = chai.spy.returns('activeItemsKey');
-
 
     stat.setClient(client);
 
@@ -38,7 +34,7 @@ describe('should go through correct flow when user is eligible for debt view', (
   });
 });
 
-describe('shoudl go through correct flow when user is not elgible for debt views', () => {
+describe('should go through correct flow when user is not elgible for debt views', () => {
   it('should return empty value, if there are no values in active set and recommended set', () => {
     const client = {
       sismember: chai.spy.returns(Promise.resolve(false)),
@@ -51,8 +47,6 @@ describe('shoudl go through correct flow when user is not elgible for debt views
         })
       }),
     }
-    Key.recommendedZSet = chai.spy.returns('recommendedZSet');
-    Key.activeItemsZSet = chai.spy.returns('activeItemsKey');
   
     stat.setClient(client);
   
@@ -76,9 +70,6 @@ describe('shoudl go through correct flow when user is not elgible for debt views
       zinterstore: chai.spy.returns(Promise.resolve([3])),
       zrevrange: chai.spy.returns([3]),
     }
-    Key.recommendedZSet = chai.spy.returns('recommendedZSet');
-    Key.activeItemsZSet = chai.spy.returns('activeItemsKey');
-    Key.userIntersectionZSet = chai.spy.returns('userInstersectionKey')
   
     stat.setClient(client);
   
@@ -91,7 +82,7 @@ describe('shoudl go through correct flow when user is not elgible for debt views
 
   it('should return recommended set if intersection is empty', () => {
     function spyZrevRange(key) {
-      if (key === 'userInstersectionKey') {
+      if (key === Key.userIntersectionZSet) {
         return [];
       }
       return [5,6,7];
@@ -108,9 +99,6 @@ describe('shoudl go through correct flow when user is not elgible for debt views
       zinterstore: chai.spy.returns(Promise.resolve([3])),
       zrevrange: spyZrevRange,
     }
-    Key.recommendedZSet = chai.spy.returns('recommendedZSet');
-    Key.activeItemsZSet = chai.spy.returns('activeItemsKey');
-    Key.userIntersectionZSet = chai.spy.returns('userInstersectionKey')
   
     stat.setClient(client);
   
@@ -122,7 +110,7 @@ describe('shoudl go through correct flow when user is not elgible for debt views
 
   it('should return recommended set if active items set is empty', () => {
     function spyZrevRange(key) {
-      if (key === 'recommendedZSet') {
+      if (key === Key.recommendedZSet('userID')) {
         return [7,8];
       }
     }
@@ -138,9 +126,6 @@ describe('shoudl go through correct flow when user is not elgible for debt views
       zinterstore: chai.spy.returns(Promise.resolve([3])),
       zrevrange: spyZrevRange,
     }
-    Key.recommendedZSet = chai.spy.returns('recommendedZSet');
-    Key.activeItemsZSet = chai.spy.returns('activeItemsKey');
-    Key.userIntersectionZSet = chai.spy.returns('userInstersectionKey')
   
     stat.setClient(client);
   
@@ -152,7 +137,7 @@ describe('shoudl go through correct flow when user is not elgible for debt views
 
   it('should return active set if recommended items set is empty', () => {
     function spyZrevRange(key) {
-      if (key === 'activeItemsKey') {
+      if (key === Key.activeItemsZSet()) {
         return [8, 9];
       }
     }
@@ -168,9 +153,6 @@ describe('shoudl go through correct flow when user is not elgible for debt views
       zinterstore: chai.spy.returns(Promise.resolve([3])),
       zrevrange: spyZrevRange,
     }
-    Key.recommendedZSet = chai.spy.returns('recommendedZSet');
-    Key.activeItemsZSet = chai.spy.returns('activeItemsKey');
-    Key.userIntersectionZSet = chai.spy.returns('userInstersectionKey')
   
     stat.setClient(client);
   
@@ -193,9 +175,6 @@ describe('shoudl go through correct flow when user is not elgible for debt views
       zinterstore: chai.spy.returns(Promise.resolve([3])),
       zrevrange: chai.spy.returns([1,2,3]),
     }
-    Key.recommendedZSet = chai.spy.returns('recommendedZSet');
-    Key.activeItemsZSet = chai.spy.returns('activeItemsKey');
-    Key.userIntersectionZSet = chai.spy.returns('userInstersectionKey')
   
     stat.setClient(client);
   
@@ -214,9 +193,6 @@ describe('should handle "real" error correctly' , () => {
       })),
 
     }
-    Key.recommendedZSet = chai.spy.returns('recommendedZSet');
-    Key.activeItemsZSet = chai.spy.returns('activeItemsKey');
-    Key.userIntersectionZSet = chai.spy.returns('userInstersectionKey')
   
     stat.setClient(client);
   
